@@ -40,6 +40,9 @@ export const t = {
     uploadLogo: 'העלה לוגו',
     uploadImage: 'העלה תמונה',
     uploadQr: 'העלה QR קוד',
+    socialFollowLabel: 'עקבתי',
+    socialRequiredHint: 'יש לעקוב אחר לפחות 2 פלטפורמות כדי להמשיך',
+    socialRequiredError: 'נא לסמן מעקב אחר לפחות 2 רשתות חברתיות',
   },
   en: {
     title: 'Leave Your Details',
@@ -82,6 +85,9 @@ export const t = {
     uploadLogo: 'Upload Logo',
     uploadImage: 'Upload Image',
     uploadQr: 'Upload QR Code',
+    socialFollowLabel: 'I followed',
+    socialRequiredHint: 'Follow at least 2 platforms to continue',
+    socialRequiredError: 'Please follow at least 2 social platforms',
   },
 };
 

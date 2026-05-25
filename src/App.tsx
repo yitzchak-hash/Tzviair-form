@@ -3,7 +3,6 @@ import { AppProvider, useApp } from './context/AppContext';
 import { LanguageToggle } from './components/LanguageToggle';
 import { Logo } from './components/Logo';
 import { FormRenderer } from './components/FormRenderer';
-import { SocialFollowSection } from './components/SocialFollowSection';
 import { HiddenAdminButton } from './components/admin/HiddenAdminButton';
 import { AdminCodeModal } from './components/admin/AdminCodeModal';
 import { AdminPanel } from './components/admin/AdminPanel';
@@ -60,11 +59,8 @@ function AppContent() {
         {/* Divider */}
         <div className="h-px bg-gradient-to-r from-[#44B3E1]/30 via-[#1C2D55]/10 to-transparent mb-10" />
 
-        {/* Form */}
+        {/* Form (includes social checkboxes + submit button) */}
         <FormRenderer />
-
-        {/* Social follow section */}
-        <SocialFollowSection />
 
       </div>
 
