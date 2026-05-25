@@ -2,6 +2,8 @@ import React, { createContext, useContext, useState, useEffect, useCallback } fr
 import type { Lang, AppSettings, LogEntry } from '../types';
 import { loadSettings, saveSettings } from '../utils/storage';
 import { addLogEntry, getLog } from '../utils/log';
+import { loadSettingsFromCloud, saveSettingsToCloud } from '../utils/cloudSettings';
+import { isFirebaseConfigured } from '../utils/firebaseClient';
 
 interface AppContextValue {
   lang: Lang;
@@ -10,6 +12,7 @@ interface AppContextValue {
   updateSettings: (s: AppSettings) => void;
   log: LogEntry[];
   addLog: (action: string, detail: string, status?: 'success' | 'error' | 'info') => void;
+  cloudSynced: boolean;
 }
 
 const AppContext = createContext<AppContextValue | null>(null);
@@ -18,10 +21,21 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [lang, setLangState] = useState<Lang>('he');
   const [settings, setSettings] = useState<AppSettings>(() => loadSettings());
   const [log, setLog] = useState<LogEntry[]>(() => getLog());
+  const [cloudSynced, setCloudSynced] = useState(false);
 
   useEffect(() => {
     const entries = addLogEntry('App Loaded', 'Application started');
     setLog(entries);
+
+    if (isFirebaseConfigured()) {
+      loadSettingsFromCloud().then((cloudSettings) => {
+        if (cloudSettings) {
+          setSettings(cloudSettings);
+          saveSettings(cloudSettings);
+          setCloudSynced(true);
+        }
+      });
+    }
   }, []);
 
   const setLang = useCallback((l: Lang) => {
@@ -33,6 +47,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const updateSettings = useCallback((s: AppSettings) => {
     setSettings(s);
     saveSettings(s);
+    void saveSettingsToCloud(s).then(() => setCloudSynced(isFirebaseConfigured()));
   }, []);
 
   const addLog = useCallback((action: string, detail: string, status: 'success' | 'error' | 'info' = 'info') => {
@@ -41,7 +56,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   return (
-    <AppContext.Provider value={{ lang, setLang, settings, updateSettings, log, addLog }}>
+    <AppContext.Provider value={{ lang, setLang, settings, updateSettings, log, addLog, cloudSynced }}>
       {children}
     </AppContext.Provider>
   );
