@@ -25,13 +25,52 @@ export interface SocialConfig {
   facebookQrUrl: string;
 }
 
-export interface AppSettings {
-  mainLogoUrl: string;
-  spreadsheetUrl: string;
+export interface ContentSettings {
   titleHe: string;
   titleEn: string;
   subtitleHe: string;
   subtitleEn: string;
+  submitHe: string;
+  submitEn: string;
+  submittingHe: string;
+  submittingEn: string;
+  successTitleHe: string;
+  successTitleEn: string;
+  successSubtitleHe: string;
+  successSubtitleEn: string;
+  fillAnotherHe: string;
+  fillAnotherEn: string;
+  errorMsgHe: string;
+  errorMsgEn: string;
+  socialHeadlineHe: string;
+  socialHeadlineEn: string;
+  socialFollowLabelHe: string;
+  socialFollowLabelEn: string;
+  socialRequiredHintHe: string;
+  socialRequiredHintEn: string;
+  socialRequiredErrorHe: string;
+  socialRequiredErrorEn: string;
+  requiredHe: string;
+  requiredEn: string;
+}
+
+export interface LayoutSettings {
+  titleSizePx: number;
+  subtitleSizePx: number;
+  questionSizePx: number;
+  submitSizePx: number;
+  titleAlign: 'start' | 'center';
+  subtitleAlign: 'start' | 'center';
+  logoMaxHeightPx: number;
+  formMaxWidthPx: number;
+  fieldGapPx: number;
+}
+
+export interface AppSettings {
+  mainLogoUrl: string;
+  spreadsheetUrl: string;
+  content: ContentSettings;
+  layout: LayoutSettings;
   social: SocialConfig;
   questions: Question[];
 }

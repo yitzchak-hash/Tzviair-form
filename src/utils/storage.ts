@@ -1,5 +1,5 @@
 import type { AppSettings, LogEntry } from '../types';
-import { DEFAULT_SETTINGS } from './defaults';
+import { DEFAULT_SETTINGS, DEFAULT_CONTENT, DEFAULT_LAYOUT } from './defaults';
 
 const SETTINGS_KEY = 'tzviair_settings';
 const LOG_KEY = 'tzviair_log';
@@ -7,18 +7,38 @@ const LOG_KEY = 'tzviair_log';
 export function loadSettings(): AppSettings {
   try {
     const raw = localStorage.getItem(SETTINGS_KEY);
-    if (!raw) return { ...DEFAULT_SETTINGS, questions: [...DEFAULT_SETTINGS.questions] };
-    const parsed = JSON.parse(raw) as Partial<AppSettings>;
+    if (!raw) return JSON.parse(JSON.stringify(DEFAULT_SETTINGS));
+    const parsed = JSON.parse(raw) as Record<string, unknown>;
+
+    // Migrate old flat title/subtitle fields into content
+    const migratedContent: Record<string, string> = {};
+    for (const key of ['titleHe','titleEn','subtitleHe','subtitleEn'] as const) {
+      if (typeof parsed[key] === 'string') migratedContent[key] = parsed[key] as string;
+    }
+
     return {
       ...DEFAULT_SETTINGS,
-      ...parsed,
-      social: { ...DEFAULT_SETTINGS.social, ...(parsed.social ?? {}) },
-      questions: parsed.questions && parsed.questions.length > 0
+      ...(typeof parsed.mainLogoUrl === 'string' && { mainLogoUrl: parsed.mainLogoUrl }),
+      ...(typeof parsed.spreadsheetUrl === 'string' && { spreadsheetUrl: parsed.spreadsheetUrl }),
+      content: {
+        ...DEFAULT_CONTENT,
+        ...migratedContent,
+        ...(parsed.content && typeof parsed.content === 'object' ? parsed.content as object : {}),
+      },
+      layout: {
+        ...DEFAULT_LAYOUT,
+        ...(parsed.layout && typeof parsed.layout === 'object' ? parsed.layout as object : {}),
+      },
+      social: {
+        ...DEFAULT_SETTINGS.social,
+        ...(parsed.social && typeof parsed.social === 'object' ? parsed.social as object : {}),
+      },
+      questions: Array.isArray(parsed.questions) && parsed.questions.length > 0
         ? parsed.questions
         : [...DEFAULT_SETTINGS.questions],
     };
   } catch {
-    return { ...DEFAULT_SETTINGS, questions: [...DEFAULT_SETTINGS.questions] };
+    return JSON.parse(JSON.stringify(DEFAULT_SETTINGS));
   }
 }
 
@@ -36,6 +56,5 @@ export function loadLog(): LogEntry[] {
 }
 
 export function saveLog(entries: LogEntry[]): void {
-  const trimmed = entries.slice(-200);
-  localStorage.setItem(LOG_KEY, JSON.stringify(trimmed));
+  localStorage.setItem(LOG_KEY, JSON.stringify(entries.slice(-200)));
 }

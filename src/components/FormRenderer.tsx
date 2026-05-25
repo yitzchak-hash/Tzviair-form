@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useApp } from '../context/AppContext';
-import { t } from '../i18n';
 import type { FormValues, Question } from '../types';
 import { validateForm } from '../utils/validateForm';
 import { buildPayload } from '../utils/buildPayload';
@@ -23,7 +22,7 @@ const EMPTY_SOCIAL: Record<SocialKey, boolean> = {
 
 export function FormRenderer() {
   const { lang, settings, addLog } = useApp();
-  const tx = t[lang];
+  const { content, layout } = settings;
   const isRtl = lang === 'he';
 
   const [values, setValues] = useState<FormValues>({});
@@ -35,9 +34,14 @@ export function FormRenderer() {
   const [submitError, setSubmitError] = useState(false);
 
   const questions: Question[] = settings.questions;
-
   const checkedCount = SOCIAL_KEYS.filter((k) => socialChecked[k]).length;
   const socialReady = checkedCount >= SOCIAL_REQUIRED;
+
+  const requiredMsg = lang === 'he' ? content.requiredHe : content.requiredEn;
+  const submitLabel = lang === 'he' ? content.submitHe : content.submitEn;
+  const submittingLabel = lang === 'he' ? content.submittingHe : content.submittingEn;
+  const errorMsg = lang === 'he' ? content.errorMsgHe : content.errorMsgEn;
+  const hintMsg = lang === 'he' ? content.socialRequiredHintHe : content.socialRequiredHintEn;
 
   const handleChange = (id: string, val: string | string[]) => {
     setValues((prev) => ({ ...prev, [id]: val }));
@@ -88,7 +92,7 @@ export function FormRenderer() {
   };
 
   if (submitted) {
-    return <SuccessState onReset={() => setSubmitted(false)} lang={lang} />;
+    return <SuccessState onReset={() => setSubmitted(false)} />;
   }
 
   return (
@@ -98,9 +102,9 @@ export function FormRenderer() {
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
-      className="flex flex-col gap-8"
+      className="flex flex-col"
+      style={{ gap: `${layout.fieldGapPx}px` }}
     >
-      {/* Form questions */}
       {questions.map((q) => {
         const label = lang === 'he' ? q.labelHe : q.labelEn;
 
@@ -115,8 +119,9 @@ export function FormRenderer() {
               onChange={(v) => handleChange(q.id, v)}
               required={q.required}
               hasError={errors[q.id]}
-              errorMsg={tx.required}
+              errorMsg={requiredMsg}
               lang={lang}
+              labelSizePx={layout.questionSizePx}
             />
           );
         }
@@ -132,8 +137,9 @@ export function FormRenderer() {
               onChange={(v) => handleChange(q.id, v)}
               required={q.required}
               hasError={errors[q.id]}
-              errorMsg={tx.required}
+              errorMsg={requiredMsg}
               lang={lang}
+              labelSizePx={layout.questionSizePx}
             />
           );
         }
@@ -149,36 +155,35 @@ export function FormRenderer() {
             onChange={(v) => handleChange(q.id, v)}
             required={q.required}
             hasError={errors[q.id]}
-            errorMsg={tx.required}
+            errorMsg={requiredMsg}
             lang={lang}
+            labelSizePx={layout.questionSizePx}
           />
         );
       })}
 
-      {/* Social follow — above the submit button */}
       <SocialCheckboxSection
         checked={socialChecked}
         onChange={handleSocialChange}
         showError={socialError}
       />
 
-      {/* Submit error */}
       {submitError && (
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className={`text-[#DB6519] text-sm leading-relaxed ${isRtl ? 'text-right' : 'text-left'}`}
+          className="text-[#DB6519] text-sm leading-relaxed text-center"
         >
-          {tx.errorMsg}
+          {errorMsg}
         </motion.p>
       )}
 
-      {/* Submit button — greyed out until 2/3 social checked */}
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col items-center gap-2">
         <button
           type="submit"
           disabled={submitting || !socialReady}
-          className={`w-full py-5 rounded-2xl text-white text-lg font-semibold tracking-wide
+          style={{ fontSize: `${layout.submitSizePx}px` }}
+          className={`w-full py-5 rounded-2xl text-white font-semibold tracking-wide
             transition-all duration-300 shadow-lg mt-2
             ${socialReady
               ? 'bg-[#1C2D55] hover:bg-[#17213A] active:scale-[0.98] shadow-[#1C2D55]/20 cursor-pointer'
@@ -187,13 +192,11 @@ export function FormRenderer() {
             disabled:opacity-60
           `}
         >
-          {submitting ? tx.submitting : tx.submit}
+          {submitting ? submittingLabel : submitLabel}
         </button>
 
         {!socialReady && (
-          <p className="text-center text-xs text-gray-400 leading-snug">
-            {tx.socialRequiredHint}
-          </p>
+          <p className="text-center text-xs text-gray-400 leading-snug">{hintMsg}</p>
         )}
       </div>
     </motion.form>

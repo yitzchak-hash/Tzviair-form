@@ -1,15 +1,18 @@
 import { motion } from 'framer-motion';
-import { t } from '../i18n';
-import type { Lang } from '../types';
+import { useApp } from '../context/AppContext';
 
 interface Props {
   onReset: () => void;
-  lang: Lang;
 }
 
-export function SuccessState({ onReset, lang }: Props) {
-  const tx = t[lang];
+export function SuccessState({ onReset }: Props) {
+  const { lang, settings } = useApp();
+  const { content } = settings;
   const isRtl = lang === 'he';
+
+  const successTitle = lang === 'he' ? content.successTitleHe : content.successTitleEn;
+  const successSubtitle = lang === 'he' ? content.successSubtitleHe : content.successSubtitleEn;
+  const fillAnother = lang === 'he' ? content.fillAnotherHe : content.fillAnotherEn;
 
   return (
     <motion.div
@@ -27,12 +30,8 @@ export function SuccessState({ onReset, lang }: Props) {
       </div>
 
       <div className="flex flex-col gap-3">
-        <h2 className="text-[#1C2D55] text-2xl font-semibold leading-snug">
-          {tx.successTitle}
-        </h2>
-        <p className="text-gray-500 text-base leading-relaxed max-w-sm mx-auto">
-          {tx.successSubtitle}
-        </p>
+        <h2 className="text-[#1C2D55] text-2xl font-semibold leading-snug">{successTitle}</h2>
+        <p className="text-gray-500 text-base leading-relaxed max-w-sm mx-auto">{successSubtitle}</p>
       </div>
 
       <button
@@ -40,7 +39,7 @@ export function SuccessState({ onReset, lang }: Props) {
         className="mt-4 px-8 py-4 rounded-2xl border border-gray-200 text-[#1C2D55] font-medium text-base
           hover:border-[#44B3E1] hover:bg-sky-50 transition-all duration-200"
       >
-        {tx.fillAnother}
+        {fillAnother}
       </button>
     </motion.div>
   );

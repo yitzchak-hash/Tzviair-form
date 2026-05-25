@@ -4,9 +4,8 @@ import { useApp } from '../context/AppContext';
 export function Logo() {
   const { settings } = useApp();
   const [failed, setFailed] = useState(false);
-
-  const uploadedUrl = settings.mainLogoUrl;
-  const defaultSrc = '/tzviair-logo.svg';
+  const { mainLogoUrl, layout } = settings;
+  const maxH = layout.logoMaxHeightPx;
 
   if (failed) {
     return (
@@ -24,14 +23,14 @@ export function Logo() {
   return (
     <div className="flex justify-center mb-6">
       <img
-        src={uploadedUrl || defaultSrc}
+        src={mainLogoUrl || '/tzviair-logo.svg'}
         alt="TzviAir"
-        className="object-contain"
-        style={{ maxWidth: '780px', maxHeight: '220px', width: '100%' }}
+        className="object-contain w-full"
+        style={{ maxHeight: `${maxH}px`, maxWidth: '780px' }}
         onError={(e) => {
           const img = e.currentTarget;
-          if (uploadedUrl && img.src !== window.location.origin + defaultSrc) {
-            img.src = defaultSrc;
+          if (mainLogoUrl && img.src !== window.location.origin + '/tzviair-logo.svg') {
+            img.src = '/tzviair-logo.svg';
           } else {
             setFailed(true);
           }

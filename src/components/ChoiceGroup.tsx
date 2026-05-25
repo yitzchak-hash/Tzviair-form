@@ -10,9 +10,10 @@ interface Props {
   hasError?: boolean;
   errorMsg: string;
   lang: Lang;
+  labelSizePx?: number;
 }
 
-export function ChoiceGroup({ label, options, value, multi, onChange, required, hasError, errorMsg, lang }: Props) {
+export function ChoiceGroup({ label, options, value, multi, onChange, required, hasError, errorMsg, lang, labelSizePx = 16 }: Props) {
   const isRtl = lang === 'he';
 
   const isSelected = (opt: string) => {
@@ -32,7 +33,10 @@ export function ChoiceGroup({ label, options, value, multi, onChange, required, 
 
   return (
     <div className="flex flex-col gap-3">
-      <span className={`text-[#17213A] font-medium text-base leading-snug ${isRtl ? 'text-right' : 'text-left'}`}>
+      <span
+        className={`text-[#17213A] font-medium leading-snug ${isRtl ? 'text-right' : 'text-left'}`}
+        style={{ fontSize: `${labelSizePx}px` }}
+      >
         {label}
         {required && <span className="text-[#DB6519] ms-1">*</span>}
       </span>
@@ -58,9 +62,7 @@ export function ChoiceGroup({ label, options, value, multi, onChange, required, 
         })}
       </div>
       {hasError && (
-        <span className="text-[#DB6519] text-sm font-medium text-center">
-          {errorMsg}
-        </span>
+        <span className="text-[#DB6519] text-sm font-medium text-center">{errorMsg}</span>
       )}
     </div>
   );
