@@ -65,15 +65,13 @@ export function SocialCheckboxSection({ checked, onChange, showError }: Props) {
                 }`}
             >
               {logoUrl ? (
-                <img src={logoUrl} alt={name} className="w-10 h-10 object-contain"
+                <img src={logoUrl} alt={name} className="w-16 h-16 object-contain"
                   onError={(e) => { e.currentTarget.style.display = 'none'; }} />
               ) : (
-                <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center">
-                  <span className="text-gray-400 text-xs font-bold">{name[0]}</span>
+                <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center">
+                  <span className="text-gray-400 text-sm font-bold">{name[0]}</span>
                 </div>
               )}
-
-              <span className="text-[#17213A] text-sm font-medium">{name}</span>
 
               {qrUrl ? (
                 <img src={qrUrl} alt={`${name} QR`} className="w-24 h-24 object-contain rounded-xl"
