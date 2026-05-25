@@ -4,6 +4,7 @@ import { useApp } from '../../context/AppContext';
 import type { AppSettings, ContentSettings, LayoutSettings, Question, QuestionType } from '../../types';
 import { fileToDataUrl } from '../../utils/imageUpload';
 import { DEFAULT_CONTENT, DEFAULT_LAYOUT } from '../../utils/defaults';
+import { SetupGuide } from './SetupGuide';
 
 interface Props {
   open: boolean;
@@ -385,6 +386,8 @@ export function AdminPanel({ open, onClose }: Props) {
                     <Input mono value={local.spreadsheetUrl} onChange={(v) => setLocal({ ...local, spreadsheetUrl: v })} />
                   </Field>
                   <SaveButton saved={!!saved.sheet} onSave={saveSheet} label="Save URL" savedLabel="Saved" />
+                  <div className="h-px bg-gray-200 my-1" />
+                  <SetupGuide />
                 </Section>
               </>
             )}
