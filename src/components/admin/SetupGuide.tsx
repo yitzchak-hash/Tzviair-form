@@ -6,33 +6,38 @@ import { downloadCSV, downloadExcel } from '../../utils/templateDownload';
 const STEPS = [
   {
     n: 1,
-    title: 'Open Google Apps Script',
-    body: 'Go to script.google.com and click "New project".',
+    title: 'Open your Google Sheet',
+    body: 'Go to Google Drive and open (or create) the spreadsheet where you want submissions to land.',
   },
   {
     n: 2,
-    title: 'Paste the code',
-    body: 'Delete everything in the editor, then paste the code below. Click the save icon (💾).',
+    title: 'Open the built-in script editor',
+    body: 'In the sheet, click Extensions → Apps Script. This binds the script directly to your sheet — no ID needed.',
   },
   {
     n: 3,
-    title: 'Deploy as Web App',
-    body: 'Click Deploy → New deployment. Choose type "Web App". Set "Execute as" → Me. Set "Who has access" → Anyone. Click Deploy.',
+    title: 'Paste the code',
+    body: 'Delete all existing code in the editor, paste the code below, then click the save icon (💾). Name the project anything you like.',
   },
   {
     n: 4,
-    title: 'Copy the endpoint URL',
-    body: 'After deploying, Google shows a Web App URL ending in /exec. Copy it.',
+    title: 'Deploy as Web App',
+    body: 'Click Deploy → New deployment → type "Web App". Set "Execute as" → Me. Set "Who has access" → Anyone. Click Deploy and confirm.',
   },
   {
     n: 5,
+    title: 'Copy the endpoint URL',
+    body: 'Google shows a Web App URL ending in /exec. Copy it.',
+  },
+  {
+    n: 6,
     title: 'Paste it in the admin',
     body: 'Paste the URL into the Google Sheets URL field above and click Save.',
   },
   {
-    n: 6,
+    n: 7,
     title: 'Test it',
-    body: 'Open the URL in a browser tab. You should see: "TzviAir Form endpoint is active ✓"',
+    body: 'Open the /exec URL in a browser tab. You should see: "TzviAir Form endpoint is active ✓". Done.',
   },
 ];
 
@@ -139,11 +144,15 @@ export function SetupGuide() {
           </div>
 
           {/* Tip */}
-          <div className="bg-amber-50 border border-amber-200 rounded-xl px-4 py-3">
+          <div className="bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 flex flex-col gap-2">
             <p className="text-xs text-amber-800 leading-relaxed">
-              <strong>Tip:</strong> After deploying, paste the <code className="bg-amber-100 px-1 rounded">/exec</code> URL
-              into the field above and save. Each form submission will automatically create a new row.
-              New questions added in the admin will appear as new columns automatically.
+              <strong>Recommended:</strong> Always open the script from inside your Google Sheet
+              (Extensions → Apps Script) — this binds them together automatically.
+              If you go to script.google.com directly instead, you must uncomment the <code className="bg-amber-100 px-1 rounded">openById</code> line
+              in the code and paste your Sheet ID.
+            </p>
+            <p className="text-xs text-amber-700 leading-relaxed">
+              New questions added in the admin panel will automatically appear as new columns in the sheet.
             </p>
           </div>
         </div>
