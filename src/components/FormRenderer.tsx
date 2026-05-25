@@ -191,7 +191,7 @@ export function FormRenderer() {
         </button>
 
         {!socialReady && (
-          <p className={`text-center text-xs text-gray-400 leading-snug ${isRtl ? 'text-right' : 'text-left'}`}>
+          <p className="text-center text-xs text-gray-400 leading-snug">
             {tx.socialRequiredHint}
           </p>
         )}

@@ -234,6 +234,7 @@ export function AdminPanel({ open, onClose }: Props) {
 
   const [localSettings, setLocalSettings] = useState<AppSettings>(() => JSON.parse(JSON.stringify(settings)));
   const [sheetSaved, setSheetSaved] = useState(false);
+  const [textSaved, setTextSaved] = useState(false);
   const [activeTab, setActiveTab] = useState<'settings' | 'questions' | 'log'>('settings');
 
   const syncLocal = () => {
@@ -242,6 +243,19 @@ export function AdminPanel({ open, onClose }: Props) {
 
   const handleOpen = () => {
     syncLocal();
+  };
+
+  const handleTextSave = () => {
+    updateSettings({
+      ...settings,
+      titleHe: localSettings.titleHe,
+      titleEn: localSettings.titleEn,
+      subtitleHe: localSettings.subtitleHe,
+      subtitleEn: localSettings.subtitleEn,
+    });
+    addLog('Form Text Updated', 'Title and subtitle saved', 'success');
+    setTextSaved(true);
+    setTimeout(() => setTextSaved(false), 2000);
   };
 
   const handleSheetSave = () => {
@@ -360,6 +374,63 @@ export function AdminPanel({ open, onClose }: Props) {
             {/* Settings Tab */}
             {activeTab === 'settings' && (
               <>
+                {/* Form Text */}
+                <Section title={tx.adminTextSection}>
+                  <div className="flex flex-col gap-3">
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-xs text-gray-500 font-medium">{tx.adminTitleHe}</label>
+                        <input
+                          type="text"
+                          dir="rtl"
+                          value={localSettings.titleHe}
+                          onChange={(e) => setLocalSettings({ ...localSettings, titleHe: e.target.value })}
+                          className="px-3 py-2.5 rounded-xl border border-gray-200 text-sm text-[#17213A] focus:outline-none focus:ring-2 focus:ring-[#44B3E1] transition-all"
+                        />
+                      </div>
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-xs text-gray-500 font-medium">{tx.adminTitleEn}</label>
+                        <input
+                          type="text"
+                          value={localSettings.titleEn}
+                          onChange={(e) => setLocalSettings({ ...localSettings, titleEn: e.target.value })}
+                          className="px-3 py-2.5 rounded-xl border border-gray-200 text-sm text-[#17213A] focus:outline-none focus:ring-2 focus:ring-[#44B3E1] transition-all"
+                        />
+                      </div>
+                    </div>
+                    <div className="flex flex-col gap-1.5">
+                      <label className="text-xs text-gray-500 font-medium">{tx.adminSubtitleHe}</label>
+                      <textarea
+                        dir="rtl"
+                        rows={2}
+                        value={localSettings.subtitleHe}
+                        onChange={(e) => setLocalSettings({ ...localSettings, subtitleHe: e.target.value })}
+                        className="px-3 py-2.5 rounded-xl border border-gray-200 text-sm text-[#17213A] focus:outline-none focus:ring-2 focus:ring-[#44B3E1] transition-all resize-none"
+                      />
+                    </div>
+                    <div className="flex flex-col gap-1.5">
+                      <label className="text-xs text-gray-500 font-medium">{tx.adminSubtitleEn}</label>
+                      <textarea
+                        rows={2}
+                        value={localSettings.subtitleEn}
+                        onChange={(e) => setLocalSettings({ ...localSettings, subtitleEn: e.target.value })}
+                        className="px-3 py-2.5 rounded-xl border border-gray-200 text-sm text-[#17213A] focus:outline-none focus:ring-2 focus:ring-[#44B3E1] transition-all resize-none"
+                      />
+                    </div>
+                    <button
+                      type="button"
+                      onClick={handleTextSave}
+                      className={`self-start px-6 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${
+                        textSaved
+                          ? 'bg-green-100 text-green-700 border border-green-200'
+                          : 'bg-[#1C2D55] text-white hover:bg-[#17213A]'
+                      }`}
+                    >
+                      {textSaved ? `✓ ${tx.adminTextSaved}` : tx.adminTextSave}
+                    </button>
+                  </div>
+                </Section>
+
                 {/* Logo */}
                 <Section title={tx.adminLogoSection}>
                   <ImageUploader

@@ -10,7 +10,7 @@ import { t } from './i18n';
 import { motion } from 'framer-motion';
 
 function AppContent() {
-  const { lang } = useApp();
+  const { lang, settings } = useApp();
   const tx = t[lang];
   const isRtl = lang === 'he';
 
@@ -49,10 +49,10 @@ function AppContent() {
           className={`mb-10 ${isRtl ? 'text-right' : 'text-left'}`}
         >
           <h1 className="text-[#1C2D55] text-3xl font-bold tracking-tight mb-3 leading-tight">
-            {tx.title}
+            {lang === 'he' ? (settings.titleHe || tx.title) : (settings.titleEn || tx.title)}
           </h1>
           <p className="text-gray-500 text-base leading-relaxed max-w-[520px]">
-            {tx.subtitle}
+            {lang === 'he' ? (settings.subtitleHe || tx.subtitle) : (settings.subtitleEn || tx.subtitle)}
           </p>
         </motion.div>
 

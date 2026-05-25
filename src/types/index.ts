@@ -28,6 +28,10 @@ export interface SocialConfig {
 export interface AppSettings {
   mainLogoUrl: string;
   spreadsheetUrl: string;
+  titleHe: string;
+  titleEn: string;
+  subtitleHe: string;
+  subtitleEn: string;
   social: SocialConfig;
   questions: Question[];
 }

@@ -36,7 +36,7 @@ export function ChoiceGroup({ label, options, value, multi, onChange, required, 
         {label}
         {required && <span className="text-[#DB6519] ms-1">*</span>}
       </span>
-      <div className={`flex flex-wrap gap-3 ${isRtl ? 'flex-row-reverse' : ''}`}>
+      <div className="flex flex-wrap gap-3 justify-center">
         {options.map((opt) => {
           const displayLabel = lang === 'he' ? opt.he : opt.en;
           const sel = isSelected(lang === 'he' ? opt.he : opt.en);
@@ -58,7 +58,7 @@ export function ChoiceGroup({ label, options, value, multi, onChange, required, 
         })}
       </div>
       {hasError && (
-        <span className={`text-[#DB6519] text-sm font-medium ${isRtl ? 'text-right' : 'text-left'}`}>
+        <span className="text-[#DB6519] text-sm font-medium text-center">
           {errorMsg}
         </span>
       )}

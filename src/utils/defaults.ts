@@ -49,6 +49,10 @@ export const DEFAULT_QUESTIONS: Question[] = [
 export const DEFAULT_SETTINGS: AppSettings = {
   mainLogoUrl: '',
   spreadsheetUrl: DEFAULT_SPREADSHEET_URL,
+  titleHe: 'השארת פרטים',
+  titleEn: 'Leave Your Details',
+  subtitleHe: 'תודה שביקרתם את צבי אייר. נשמח לשמור על קשר ולהמשיך ללוות את הפרויקטים הבאים שלכם.',
+  subtitleEn: "Thank you for visiting TzviAir. We'd love to stay connected and support your future projects.",
   social: {
     instagramLogoUrl: '',
     instagramQrUrl: '',
