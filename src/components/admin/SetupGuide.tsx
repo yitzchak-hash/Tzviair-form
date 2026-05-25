@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useApp } from '../../context/AppContext';
 import { APPS_SCRIPT_CODE } from '../../utils/appsScript';
 import { downloadCSV, downloadExcel } from '../../utils/templateDownload';
+import { isFirebaseConfigured } from '../../utils/firebaseClient';
 
 const STEPS = [
   {
@@ -45,6 +46,8 @@ export function SetupGuide() {
   const { settings } = useApp();
   const [open, setOpen] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [firebaseOpen, setFirebaseOpen] = useState(false);
+  const firebaseConfigured = isFirebaseConfigured();
 
   const handleCopy = async () => {
     try {
@@ -90,6 +93,51 @@ export function SetupGuide() {
             <span>📄</span> Download .csv
           </button>
         </div>
+      </div>
+
+      {/* Firebase cloud sync setup */}
+      <div className={`rounded-xl border px-4 py-3 flex flex-col gap-1.5 ${firebaseConfigured ? 'bg-sky-50 border-[#44B3E1]/30' : 'bg-amber-50 border-amber-200'}`}>
+        <p className={`text-xs font-semibold ${firebaseConfigured ? 'text-[#44B3E1]' : 'text-amber-700'}`}>
+          {firebaseConfigured ? '☁ Cloud sync active' : '⚠ Settings are saved locally only'}
+        </p>
+        <p className={`text-xs leading-relaxed ${firebaseConfigured ? 'text-sky-700' : 'text-amber-600'}`}>
+          {firebaseConfigured
+            ? 'Your settings sync to Firebase — changes are available on every device and your Vercel deployment.'
+            : 'Without cloud sync, settings saved here will not appear on your Vercel URL or other devices.'}
+        </p>
+        {!firebaseConfigured && (
+          <>
+            <button
+              type="button"
+              onClick={() => setFirebaseOpen((o) => !o)}
+              className="mt-1 self-start text-xs font-medium text-amber-700 underline underline-offset-2 hover:text-amber-900 transition-colors"
+            >
+              {firebaseOpen ? 'Hide setup guide ▴' : 'How to fix this ▾'}
+            </button>
+            {firebaseOpen && (
+              <ol className="flex flex-col gap-3 mt-2">
+                {[
+                  { n: 1, title: 'Create a free Firebase project', body: 'Go to console.firebase.google.com → Add project. Name it anything, disable Analytics if prompted.' },
+                  { n: 2, title: 'Add a Realtime Database', body: 'In the left sidebar click Build → Realtime Database → Create database. Choose "Start in test mode" (you can tighten rules later).' },
+                  { n: 3, title: 'Get your config keys', body: 'Go to Project Settings (gear icon) → General → Your apps → Add app → Web. Register the app and copy the firebaseConfig object shown.' },
+                  { n: 4, title: 'Add env vars to Vercel', body: 'In your Vercel project go to Settings → Environment Variables. Add: VITE_FIREBASE_API_KEY, VITE_FIREBASE_AUTH_DOMAIN, VITE_FIREBASE_DATABASE_URL, VITE_FIREBASE_PROJECT_ID — one for each value from the config.' },
+                  { n: 5, title: 'Redeploy', body: 'Trigger a new Vercel deployment (push any commit or click Redeploy in the dashboard). The env vars are baked into the build.' },
+                  { n: 6, title: 'For local dev', body: 'Create a .env.local file in the project root with the same four VITE_FIREBASE_* variables. Run npm run dev — you should see "☁ Synced" in the admin header.' },
+                ].map((step) => (
+                  <li key={step.n} className="flex gap-3">
+                    <span className="flex-shrink-0 w-5 h-5 rounded-full bg-amber-700 text-white text-xs font-bold flex items-center justify-center mt-0.5">
+                      {step.n}
+                    </span>
+                    <div className="flex flex-col gap-0.5">
+                      <span className="text-xs font-semibold text-amber-800">{step.title}</span>
+                      <span className="text-xs text-amber-700 leading-relaxed">{step.body}</span>
+                    </div>
+                  </li>
+                ))}
+              </ol>
+            )}
+          </>
+        )}
       </div>
 
       {/* Collapsible setup guide */}

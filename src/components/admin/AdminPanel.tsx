@@ -234,7 +234,7 @@ function QuestionEditor({ question, index, total, onChange, onDelete, onMoveUp, 
 // ─── Main AdminPanel ──────────────────────────────────────────────────────────
 
 export function AdminPanel({ open, onClose }: Props) {
-  const { settings, updateSettings, log, addLog } = useApp();
+  const { settings, updateSettings, log, addLog, cloudSynced } = useApp();
 
   const [local, setLocal] = useState<AppSettings>(() => JSON.parse(JSON.stringify(settings)));
   const [saved, setSaved] = useState<Record<string, boolean>>({});
@@ -333,6 +333,10 @@ export function AdminPanel({ open, onClose }: Props) {
                 <span className="text-white text-xs font-bold">A</span>
               </div>
               <span className="text-[#1C2D55] font-semibold text-base">Admin Panel</span>
+              {cloudSynced
+                ? <span className="text-xs px-2 py-0.5 rounded-full bg-sky-50 text-[#44B3E1] border border-[#44B3E1]/30 font-medium">☁ Synced</span>
+                : <span className="text-xs px-2 py-0.5 rounded-full bg-amber-50 text-amber-600 border border-amber-200 font-medium">⚠ Local only</span>
+              }
             </div>
             <button onClick={onClose}
               className="px-5 py-2.5 rounded-xl border border-gray-200 text-gray-600 text-sm font-medium hover:bg-gray-50 transition-all">
