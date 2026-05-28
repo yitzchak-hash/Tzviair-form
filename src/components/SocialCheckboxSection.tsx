@@ -64,20 +64,16 @@ export function SocialCheckboxSection({ checked, onChange, showError }: Props) {
                   : 'border-gray-200 bg-white hover:border-gray-300'
                 }`}
             >
-              {logoUrl ? (
+              {logoUrl && (
                 <img src={logoUrl} alt={name} className="w-16 h-16 object-contain"
                   onError={(e) => { e.currentTarget.style.display = 'none'; }} />
-              ) : (
-                <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center">
-                  <span className="text-gray-400 text-sm font-bold">{name[0]}</span>
-                </div>
               )}
 
               {qrUrl ? (
-                <img src={qrUrl} alt={`${name} QR`} className="w-24 h-24 object-contain rounded-xl"
+                <img src={qrUrl} alt={`${name} QR`} className="w-28 h-28 object-contain rounded-xl"
                   onError={(e) => { e.currentTarget.style.display = 'none'; }} />
               ) : (
-                <div className="w-24 h-24 rounded-xl bg-gray-50 border border-dashed border-gray-200" />
+                <div className="w-28 h-28 rounded-xl bg-gray-50 border border-dashed border-gray-200" />
               )}
 
               <div className="flex items-center gap-2 mt-1">

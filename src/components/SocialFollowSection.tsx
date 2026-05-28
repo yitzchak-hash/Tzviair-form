@@ -15,15 +15,13 @@ function SocialCard({ name, logoUrl, qrUrl }: SocialCardProps) {
 
   return (
     <div className="flex-1 min-w-[160px] bg-white rounded-3xl border border-gray-100 shadow-sm p-6 flex flex-col items-center gap-4">
-      {hasLogo ? (
+      {hasLogo && (
         <img
           src={logoUrl}
           alt={name}
           className="w-10 h-10 object-contain"
           onError={(e) => { e.currentTarget.style.display = 'none'; }}
         />
-      ) : (
-        <div className="w-10 h-10 rounded-full bg-gray-100" />
       )}
 
       <span className="text-[#17213A] text-sm font-medium">{name}</span>
